@@ -31,10 +31,10 @@
     /* Theme visuals */
     --bgImg:none;
     --innerImg: none;
-    --innerOverlay: linear-gradient(180deg, rgba(255,255,255,.70), rgba(255,255,255,.70));
+    --innerOverlay: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.86));
     --bgOverlay: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.78));
-    --cardTint: rgba(255,255,255,.92);
-    --panelTint: rgba(248,250,252,.92);
+    --cardTint: rgba(255,255,255,.97);
+    --panelTint: rgba(248,250,252,.97);
   }
 
   [data-mode="dark"]{
@@ -51,10 +51,10 @@
     --shadow:0 18px 42px rgba(0,0,0,.42);
 
     --bgOverlay: linear-gradient(180deg, rgba(5,10,20,.72), rgba(5,10,20,.72));
-    --innerOverlay: linear-gradient(180deg, rgba(5,10,20,.55), rgba(5,10,20,.55));
+    --innerOverlay: linear-gradient(180deg, rgba(5,10,20,.73), rgba(5,10,20,.73));
     --innerImg: none;
-    --cardTint: rgba(15,23,42,.88);
-    --panelTint: rgba(11,19,39,.88);
+    --cardTint: rgba(15,23,42,.94);
+    --panelTint: rgba(11,19,39,.94);
   }
 
   /* =========================
@@ -118,6 +118,15 @@
     color:var(--ink);
     font:16px/1.45 system-ui,Segoe UI,Roboto,Arial,sans-serif;
   }
+  .card, .panel, .modal {
+  text-shadow: 0 1px 1px rgba(0,0,0,.12);
+}
+[data-mode="dark"] .card,
+[data-mode="dark"] .panel,
+[data-mode="dark"] .modal {
+  text-shadow: 0 1px 2px rgba(0,0,0,.45);
+}
+
   .wrap{max-width:1050px;margin:18px auto;padding:16px}
   .card{
     background: var(--innerOverlay), var(--innerImg), var(--cardTint);
