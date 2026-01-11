@@ -697,9 +697,11 @@ $("saveDigits").onclick = async () => {
 
 $("setSecretBtn").onclick = async () => {
   const digits = roomState.settings?.digits || 4;
-  const val = secretUI?.getValue() || "";
-  if(val.length !== digits || val.includes("")) return alert(`Enter exactly ${digits} digits.`);
+  const val = (secretUI?.getValue() || "").trim();
 
+  if (!new RegExp(`^\\d{${digits}}$`).test(val)) {
+    return alert(`Enter exactly ${digits} digits.`);
+  }
   // store secret (client-only approach)
   await db.ref(`rooms/${my.room}/secrets/${my.pid}`).set(val);
   await db.ref(`rooms/${my.room}/players/${my.pid}/hasSecret`).set(true);
@@ -801,8 +803,11 @@ $("submitGuess").onclick = async () => {
   if(roomState.winner) return;
 
   const digits = roomState.settings?.digits || 4;
-  const guess = guessUI?.getValue() || "";
-  if(guess.length !== digits || guess.includes("")) return alert(`Enter exactly ${digits} digits.`);
+  const guess = (guessUI?.getValue() || "").trim();
+if (!new RegExp(`^\\d{${digits}}$`).test(guess)) {
+  return alert(`Enter exactly ${digits} digits.`);
+}
+
 
   const oppPid = myOpponentPid();
   const oppSecret = roomState.secrets?.[oppPid];
