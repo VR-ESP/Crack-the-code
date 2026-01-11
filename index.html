@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Crack the Code (2P Room)</title>
+
+<style>
+  :root{
+    --bg:#ffffff; --card:#ffffff; --ink:#111827; --muted:#6b7280;
+    --line:#e5e7eb; --line2:#d1d5db; --btn:#2563eb; --btnTxt:#fff;
+    --panel:#f8fafc; --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+  }
+  [data-theme="dark"]{
+    --bg:#0b1220; --card:#0f172a; --ink:#e5e7eb; --muted:#94a3b8;
+    --line:#24324a; --line2:#334155; --btn:#60a5fa; --btnTxt:#0b1220;
+    --panel:#0b1327; --shadow:0 14px 34px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  .wrap{max-width:1050px;margin:22px auto;padding:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+  h1{
+    margin:6px 0 14px;font-weight:900;text-align:center;font-size:32px;letter-spacing:.2px;
+    background:linear-gradient(90deg,#2563eb,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent
+  }
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+  .topbar .right{display:flex;gap:8px;align-items:center}
+  .mini{font-size:12px;color:var(--muted)}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;background:transparent}
+  .dot{width:12px;height:12px;border-radius:50%}
+  .hr{height:1px;background:var(--line);margin:14px 0;border-radius:1px}
+
+  .center{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row3{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:12px}
+  .hidden{display:none !important}
+
+  button{
+    border:1px solid var(--line2);background:var(--panel);
+    border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:800;color:var(--ink)
+  }
+  button.primary{background:var(--btn);border-color:var(--btn);color:var(--btnTxt)}
+  button.ghost{background:transparent}
+  button:disabled{opacity:.55;cursor:not-allowed}
+
+  input[type=text], select{
+    width:100%;border:1px solid var(--line2);border-radius:12px;padding:10px 12px;
+    background:transparent;color:var(--ink);outline:none
+  }
+  select{cursor:pointer}
+  .title{font-weight:900;margin:2px 0 6px}
+
+  /* Game layout */
+  .gameGrid{
+    display:grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap:14px;
+    align-items:start;
+  }
+  @media(max-width:900px){
+    .gameGrid{grid-template-columns:1fr}
+  }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px;
+  }
+
+  .turnBanner{
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  }
+  .bigSecret{
+    font-size:28px;font-weight:1000;letter-spacing:6px;
+    padding:10px 14px;border-radius:14px;border:1px dashed var(--line2);
+    display:inline-flex;align-items:center;gap:10px;
+    background:transparent;
+  }
+  .bigSecret .lock{
+    font-size:14px;font-weight:900;letter-spacing:0;color:var(--muted)
+  }
+
+  .boxes{display:flex;gap:8px;flex-wrap:wrap}
+  .digitBox{
+    width:54px;height:54px;border-radius:14px;border:1px solid var(--line2);
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;
+  }
+  .digitBox input{
+    width:100%;height:100%;
+    border:0;outline:none;
+    background:transparent;color:var(--ink);
+    text-align:center;font-size:20px;font-weight:900;
+  }
+
+  .statusLine{
+    font-weight:900;
+  }
+  .statusLine.good{color:var(--good)}
+  .statusLine.warn{color:var(--warn)}
+  .statusLine.bad{color:var(--bad)}
+
+  /* History */
+  .history{
+    max-height:360px;
+    overflow:auto;
+    padding-right:6px;
+  }
+  .logItem{
+    border:1px solid var(--line);
+    background:transparent;
+    border-radius:12px;
+    padding:10px 10px;
+    margin:8px 0;
+  }
+  .logTop{
+    display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center
+  }
+  .tag{
+    font-size:12px;font-weight:900;padding:3px 8px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)
+  }
+  .guess{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size:18px;font-weight:900;letter-spacing:3px;
+  }
+
+  /* Modal */
+  .modalBack{
+    position:fixed;inset:0;background:rgba(0,0,0,.55);
+    display:none;align-items:center;justify-content:center;z-index:9999;
+    padding:16px;
+  }
+  .modalBack.show{display:flex}
+  .modal{
+    max-width:760px;width:100%;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:16px;padding:16px;box-shadow:var(--shadow);
+  }
+  .modal h2{margin:0 0 10px;font-size:22px}
+  .modal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+  /* Winner popup + spaghetti */
+  .toast{
+    position:fixed; top:-200px; left:0; right:0; z-index:9998;
+    display:flex; justify-content:center; pointer-events:none;
+  }
+  .toast-inner{
+    background:var(--card); border:1px solid var(--line2); border-radius:14px;
+    padding:12px 16px; margin-top:12px; box-shadow:0 14px 36px rgba(0,0,0,.18);
+    font-weight:1000; color:var(--ink); display:flex; align-items:center; gap:10px;
+  }
+  .toast.show{animation:slideDown .5s ease forwards}
+  .toast.hide{animation:slideUp .4s ease forwards}
+  @keyframes slideDown{from{top:-200px;opacity:.2}to{top:0;opacity:1}}
+  @keyframes slideUp{from{top:0;opacity:1}to{top:-200px;opacity:0}}
+
+  .spaghetti{
+    position:fixed; top:0; left:0; width:100vw; height:100vh;
+    pointer-events:none; overflow:visible; z-index:9997;
+  }
+  .spaghetti i{
+    position:absolute; top:-30px;
+    width:6px; height:26px; border-radius:999px;
+    opacity:.95;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{ to{ transform:translateY(110vh) rotate(520deg); opacity:.9; } }
+</style>
+</head>
+
+<body>
+<div class="toast" id="toast"><div class="toast-inner" id="toastText">🏆 Winner!</div></div>
+<div class="spaghetti" id="spaghetti"></div>
+
+<div class="modalBack" id="rulesBack">
+  <div class="modal">
+    <h2>Rules — Crack the Code (2 Players)</h2>
+    <div class="mini" style="margin-bottom:10px">
+      Flow: Create/Join room → Lobby (names + digits) → Each player sets a secret → Turns start → First correct guess wins.
+    </div>
+    <ol style="margin:0 0 0 18px">
+      <li><b>Create Room</b> to get a Room Code. Share it with the second player who clicks <b>Join Room</b>.</li>
+      <li>In <b>Lobby</b>, set player names (or keep default Player A / Player B).</li>
+      <li>Select <b>Digits</b> (3/4/5/6). You’ll see an approximate time to finish.</li>
+      <li>Each player sets their <b>secret code</b> (same digit length). Then the game starts automatically.</li>
+      <li>On your turn, enter a guess. You get feedback:
+        <ul>
+          <li><b>X numbers correct</b> = correct digits (regardless of position)</li>
+          <li><b>Y positions correct</b> = digits in the correct spot</li>
+        </ul>
+      </li>
+      <li>Guesses + feedback are saved in the right panel so you can plan the next move.</li>
+      <li>If a player guesses the opponent’s secret exactly → <b>WIN</b> 🎉</li>
+      <li>Click <b>One more game</b> to return to lobby and pick digits again.</li>
+    </ol>
+    <div class="actions">
+      <button id="closeRules" class="primary">Got it</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+
+    <div class="topbar">
+      <div class="pill">
+        <span class="mini">Room:</span>&nbsp;<b id="roomTop">-</b>
+      </div>
+      <div class="right">
+        <button id="rulesBtn" class="ghost">ℹ️ Rules</button>
+        <button id="themeBtn" class="primary">🌙 Dark</button>
+      </div>
+    </div>
+
+    <h1>Crack the Code</h1>
+
+    <!-- Step: Choose -->
+    <div id="step-choose" class="center" style="margin:8px 0 6px">
+      <button id="btnCreate" class="primary">Create Room</button>
+      <button id="btnJoin">Join Room</button>
+    </div>
+
+    <!-- Create -->
+    <div id="step-create" class="hidden">
+      <div class="row2">
+        <div>
+          <div class="title">Your Name</div>
+          <input id="createName" type="text" placeholder="e.g., Player A" />
+        </div>
+        <div>
+          <div class="title">Room Code</div>
+          <input id="createCode" type="text" readonly />
+        </div>
+      </div>
+      <div class="center" style="margin-top:10px">
+        <button id="createGo" class="primary">Create & Enter Lobby</button>
+        <button id="back1">Back</button>
+      </div>
+    </div>
+
+    <!-- Join -->
+    <div id="step-join" class="hidden">
+      <div class="row2">
+        <div>
+          <div class="title">Your Name</div>
+          <input id="joinName" type="text" placeholder="e.g., Player B" />
+        </div>
+        <div>
+          <div class="title">Room Code</div>
+          <input id="joinCode" type="text" placeholder="ABCDE" />
+        </div>
+      </div>
+      <div class="center" style="margin-top:10px">
+        <button id="joinGo" class="primary">Join Lobby</button>
+        <button id="back2">Back</button>
+      </div>
+    </div>
+
+    <!-- Lobby -->
+    <div id="step-lobby" class="hidden">
+      <div class="row3">
+        <div class="panel">
+          <div class="title">Players (2 only)</div>
+          <div id="players" class="center" style="justify-content:flex-start"></div>
+          <div class="hr"></div>
+          <div class="mini">
+            Tip: If you leave name empty, default will be Player A / Player B.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="title">Digits</div>
+          <select id="digitsSel">
+            <option value="3">3 digits (≈ 5–10 min)</option>
+            <option value="4" selected>4 digits (≈ 10–20 min)</option>
+            <option value="5">5 digits (≈ 20–35 min)</option>
+            <option value="6">6 digits (≈ 35–60 min)</option>
+          </select>
+          <div class="mini" style="margin-top:8px" id="digitsHint">
+            Pick how long you want the game to be.
+          </div>
+          <div class="hr"></div>
+          <button id="saveDigits" class="primary" style="width:100%">Save Digits</button>
+          <div class="mini" style="margin-top:8px">
+            Anyone can change digits in lobby (before secrets are set).
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="title">Set your secret</div>
+          <div class="mini" style="margin-bottom:8px">
+            Enter exactly <b id="digitCountLabel">4</b> digits. (Example: 7590)
+          </div>
+          <div class="boxes" id="secretBoxes"></div>
+          <div class="center" style="margin-top:10px;justify-content:flex-start">
+            <button id="setSecretBtn" class="primary">Lock Secret</button>
+            <button id="clearSecretBtn">Clear</button>
+          </div>
+          <div class="mini" style="margin-top:8px" id="secretStatus">
+            Waiting for both players...
+          </div>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+      <div class="center">
+        <button id="goGameBtn" class="primary hidden">Go to Game</button>
+      </div>
+    </div>
+
+    <!-- Game -->
+    <div id="step-game" class="hidden">
+      <div class="gameGrid">
+        <!-- Left: play -->
+        <div class="panel">
+          <div class="turnBanner">
+            <div class="pill">
+              <span class="mini">You:</span>&nbsp;<span id="youDot" class="dot"></span>&nbsp;<b id="youName">-</b>
+            </div>
+            <div class="pill">
+              <span class="mini">Turn:</span>&nbsp;<b id="turnName">-</b>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="title">Your secret (shown only to you)</div>
+          <div class="bigSecret">
+            <span id="mySecretDisplay">••••</span>
+            <span class="lock" id="secretMaskNote">(masked)</span>
+            <button id="toggleSecret" class="ghost" style="padding:6px 10px;border-radius:10px">👁️</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="title">Your turn input</div>
+          <div class="mini" style="margin-bottom:8px">
+            Enter <b id="guessDigitCount">4</b> digits. Example guesses: 7800, 0970, etc.
+          </div>
+
+          <div class="boxes" id="guessBoxes"></div>
+
+          <div class="center" style="margin-top:10px;justify-content:flex-start">
+            <button id="submitGuess" class="primary">Submit Guess</button>
+            <button id="clearGuess">Clear</button>
+          </div>
+
+          <div class="mini" style="margin-top:10px" id="lastFeedback">
+            Waiting...
+          </div>
+
+          <div class="hr"></div>
+          <div class="center" style="justify-content:flex-end">
+            <button id="oneMoreGame" class="primary hidden">🔁 One more game</button>
+          </div>
+        </div>
+
+        <!-- Right: history -->
+        <div class="panel">
+          <div class="title">History / Analysis</div>
+          <div class="mini" style="margin-bottom:8px">
+            Scrollable log of guesses + feedback.
+          </div>
+
+          <div class="row2" style="gap:10px">
+            <button id="tabMine" class="primary">My guesses</button>
+            <button id="tabOpp">Opponent guesses</button>
+          </div>
+
+          <div class="hr"></div>
+          <div class="history" id="historyList"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Firebase compat -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
+<script>
+/* ==========================
+   Firebase Config (REPLACE)
+   ========================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyDIL-Awme_yTv9Jt7tSdX2WI2BkOlbHTlI",
+  authDomain: "crack-the-code-game-35615.firebaseapp.com",
+  projectId: "crack-the-code-game-35615",
+  storageBucket: "crack-the-code-game-35615.firebasestorage.app",
+  messagingSenderId: "281951990500",
+  appId: "1:281951990500:web:ab19ad486b05477e06b2f1"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* ==========================
+   State
+   ========================== */
+const PASTEL = ["#ff6b6b","#60a5fa","#34d399","#fbbf24","#a78bfa","#22d3ee","#f472b6","#86efac"];
+
+let my = { pid:null, name:"", color:"", room:"" };
+
+let roomState = {
+  settings:{ digits:4 },
+  order: [],
+  players: {},
+  secrets: {},
+  started: false,
+  turnPid: null,
+  winner: null
+};
+
+let currentTab = "mine";
+let revealSecret = false;
+
+/* ==========================
+   Helpers
+   ========================== */
+const $ = id => document.getElementById(id);
+const show = id => $(id).classList.remove("hidden");
+const hide = id => $(id).classList.add("hidden");
+
+function code(){
+  return Math.random().toString(36).substring(2,7).toUpperCase();
+}
+function now(){ return Date.now(); }
+
+function setTheme(theme){
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("ctc_theme", theme);
+  $("themeBtn").textContent = (theme === "dark") ? "☀️ Light" : "🌙 Dark";
+}
+function initTheme(){
+  const saved = localStorage.getItem("ctc_theme") || "light";
+  setTheme(saved);
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute("data-theme") || "light";
+  setTheme(cur === "dark" ? "light" : "dark");
+}
+
+function escapeHtml(s){
+  return (s||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function buildDigitBoxes(hostId, digits, onDone){
+  const host = $(hostId);
+  host.innerHTML = "";
+  const inputs = [];
+
+  for(let i=0;i<digits;i++){
+    const wrap = document.createElement("div");
+    wrap.className = "digitBox";
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.inputMode = "numeric";
+    inp.maxLength = 1;
+    inp.placeholder = "0";
+    inp.addEventListener("input", () => {
+      inp.value = inp.value.replace(/[^0-9]/g,"").slice(0,1);
+      if(inp.value && i < digits-1) inputs[i+1].focus();
+      if(onDone){
+        const val = inputs.map(x => x.value).join("");
+        if(val.length === digits && !val.includes("")) onDone(val);
+      }
+    });
+    inp.addEventListener("keydown", (e) => {
+      if(e.key === "Backspace" && !inp.value && i>0){
+        inputs[i-1].focus();
+      }
+      if(e.key === "Enter"){
+        const val = inputs.map(x => x.value).join("");
+        if(val.length === digits && !val.includes("")) onDone && onDone(val);
+      }
+    });
+    wrap.appendChild(inp);
+    host.appendChild(wrap);
+    inputs.push(inp);
+  }
+
+  return {
+    focus(){ inputs[0]?.focus(); },
+    getValue(){ return inputs.map(i => i.value).join(""); },
+    clear(){ inputs.forEach(i => i.value=""); inputs[0]?.focus(); }
+  };
+}
+
+function countMatches(secret, guess){
+  // secret/guess are strings same length
+  const n = secret.length;
+
+  // positions correct
+  let posCorrect = 0;
+  for(let i=0;i<n;i++){
+    if(secret[i] === guess[i]) posCorrect++;
+  }
+
+  // numbers correct (multiset intersection)
+  const freqS = {};
+  const freqG = {};
+  for(const ch of secret){ freqS[ch] = (freqS[ch]||0)+1; }
+  for(const ch of guess){  freqG[ch] = (freqG[ch]||0)+1; }
+
+  let numCorrect = 0;
+  for(const d in freqS){
+    if(freqG[d]) numCorrect += Math.min(freqS[d], freqG[d]);
+  }
+
+  return { numCorrect, posCorrect };
+}
+
+function formatFeedback(numCorrect, posCorrect){
+  const n = numCorrect;
+  const p = posCorrect;
+  const numTxt = `${n} number${n===1?"":"s"} correct`;
+  const posTxt = `${p} position${p===1?"":"s"} correct`;
+  return `${numTxt}, ${posTxt}`;
+}
+
+/* winner toast + spaghetti */
+function showWinnerToast(text){
+  const t=$("toast"), tx=$("toastText");
+  tx.textContent = text;
+  t.classList.remove("hide");
+  t.classList.add("show");
+  makeSpaghetti();
+  setTimeout(()=>{ t.classList.remove("show"); t.classList.add("hide"); }, 2600);
+}
+function makeSpaghetti(){
+  const c=$("spaghetti"); c.innerHTML="";
+  const colors=["#ef4444","#f59e0b","#10b981","#3b82f6","#a855f7","#22d3ee","#f472b6"];
+  for(let i=0;i<150;i++){
+    const piece=document.createElement("i");
+    piece.style.left = (Math.random()*100) + "vw";
+    piece.style.background = colors[i%colors.length];
+    piece.style.animationDuration = (1.8 + Math.random()*1.7) + "s";
+    piece.style.transform = `rotate(${Math.random()*180}deg)`;
+    c.appendChild(piece);
+  }
+}
+
+/* ==========================
+   UI Navigation
+   ========================== */
+function goto(step){
+  ["step-choose","step-create","step-join","step-lobby","step-game"].forEach(hide);
+  show(step);
+}
+
+$("btnCreate").onclick = () => {
+  goto("step-create");
+  $("createCode").value = code();
+};
+$("btnJoin").onclick = () => goto("step-join");
+$("back1").onclick = () => goto("step-choose");
+$("back2").onclick = () => goto("step-choose");
+
+$("rulesBtn").onclick = () => $("rulesBack").classList.add("show");
+$("closeRules").onclick = () => $("rulesBack").classList.remove("show");
+$("rulesBack").onclick = (e) => { if(e.target.id === "rulesBack") $("rulesBack").classList.remove("show"); };
+
+$("themeBtn").onclick = toggleTheme;
+
+/* ==========================
+   Create / Join Room
+   ========================== */
+async function createOrJoin({mode, nickname, roomCode}){
+  const room = roomCode.trim().toUpperCase();
+  if(!room) return alert("Room code missing.");
+
+  // read room
+  const roomRef = db.ref(`rooms/${room}`);
+  const snap = await roomRef.get();
+
+  if(mode === "create"){
+    if(snap.exists()) return alert("Room already exists. Try a new code.");
+    const pid = "p" + Date.now();
+    my = { pid, name: nickname.trim() || "Player A", color: PASTEL[0], room };
+
+    await roomRef.set({
+      createdAt: now(),
+      stage: "lobby",
+      settings: { digits: 4 },
+      order: [pid],
+      turnPid: null,
+      started: false,
+      winner: null
+    });
+
+    await db.ref(`rooms/${room}/players/${pid}`).set({
+      nickname: my.name,
+      color: my.color,
+      hasSecret: false
+    });
+
+  } else {
+    if(!snap.exists()) return alert("Room not found.");
+    const orderSnap = await db.ref(`rooms/${room}/order`).get();
+    const order = orderSnap.val() || [];
+    if(order.length >= 2) return alert("Room already has 2 players.");
+
+    const pid = "p" + Date.now();
+    const idx = order.length; // 0 or 1
+    my = { pid, name: nickname.trim() || (idx===0 ? "Player A" : "Player B"), color: PASTEL[idx%PASTEL.length], room };
+
+    await db.ref(`rooms/${room}/order`).set([...order, pid]);
+    await db.ref(`rooms/${room}/players/${pid}`).set({
+      nickname: my.name,
+      color: my.color,
+      hasSecret: false
+    });
+  }
+
+  $("roomTop").textContent = my.room;
+  attachRoomListeners();
+  goto("step-lobby");
+}
+
+$("createGo").onclick = () => createOrJoin({
+  mode: "create",
+  nickname: $("createName").value,
+  roomCode: $("createCode").value
+});
+$("joinGo").onclick = () => createOrJoin({
+  mode: "join",
+  nickname: $("joinName").value,
+  roomCode: $("joinCode").value
+});
+
+/* ==========================
+   Lobby Setup
+   ========================== */
+let secretUI = null;
+let guessUI = null;
+
+function updateDigitsUI(digits){
+  $("digitCountLabel").textContent = digits;
+  $("guessDigitCount").textContent = digits;
+
+  // Lobby secret boxes
+  secretUI = buildDigitBoxes("secretBoxes", digits);
+
+  // Game guess boxes
+  guessUI = buildDigitBoxes("guessBoxes", digits, (val) => {
+    // Enter auto-submit only if user wants; we keep manual submit
+  });
+
+  // Mask display
+  $("mySecretDisplay").textContent = "•".repeat(digits);
+  $("secretMaskNote").textContent = "(masked)";
+  revealSecret = false;
+}
+
+function renderPlayers(){
+  const host = $("players");
+  host.innerHTML = "";
+  const order = roomState.order || [];
+
+  order.forEach((pid, idx) => {
+    const p = roomState.players?.[pid];
+    if(!p) return;
+    const pill = document.createElement("div");
+    pill.className = "pill";
+    const label = escapeHtml(p.nickname || (idx===0 ? "Player A" : "Player B"));
+    const secretTxt = p.hasSecret ? `<span class="mini" style="color:var(--good)">&nbsp;SECRET ✓</span>` : `<span class="mini">&nbsp;secret not set</span>`;
+    pill.innerHTML = `<span class="dot" style="background:${p.color||"#999"}"></span><b>${label}</b>${secretTxt}`;
+    host.appendChild(pill);
+  });
+}
+
+function canStart(){
+  const order = roomState.order || [];
+  if(order.length !== 2) return false;
+  const pA = roomState.players?.[order[0]];
+  const pB = roomState.players?.[order[1]];
+  return !!(pA?.hasSecret && pB?.hasSecret);
+}
+
+$("saveDigits").onclick = async () => {
+  const digits = parseInt($("digitsSel").value, 10);
+  if(!Number.isInteger(digits) || digits<3 || digits>6) return;
+
+  // Don’t allow changing digits after anyone locked a secret
+  const anySecret = Object.values(roomState.players||{}).some(p => p.hasSecret);
+  if(anySecret) return alert("Digits cannot be changed after a secret is locked. Click 'One more game' after finishing.");
+
+  await db.ref(`rooms/${my.room}/settings/digits`).set(digits);
+};
+
+$("setSecretBtn").onclick = async () => {
+  const digits = roomState.settings?.digits || 4;
+  const val = secretUI?.getValue() || "";
+  if(val.length !== digits || val.includes("")) return alert(`Enter exactly ${digits} digits.`);
+
+  // store secret (client-only approach)
+  await db.ref(`rooms/${my.room}/secrets/${my.pid}`).set(val);
+  await db.ref(`rooms/${my.room}/players/${my.pid}/hasSecret`).set(true);
+
+  $("secretStatus").innerHTML = `<span class="statusLine good">Secret locked. Waiting for opponent...</span>`;
+};
+
+$("clearSecretBtn").onclick = () => {
+  secretUI?.clear();
+};
+
+$("goGameBtn").onclick = () => {
+  goto("step-game");
+};
+
+function lobbyStatusText(){
+  const order = roomState.order || [];
+  if(order.length < 2) return `<span class="statusLine warn">Waiting for second player to join...</span>`;
+  if(!canStart()) return `<span class="statusLine warn">Waiting until both players lock secrets...</span>`;
+  return `<span class="statusLine good">Both secrets ready. Game will start now.</span>`;
+}
+
+/* ==========================
+   Game Logic
+   ========================== */
+function myOpponentPid(){
+  const order = roomState.order || [];
+  if(order.length !== 2) return null;
+  return order[0] === my.pid ? order[1] : order[0];
+}
+
+function isMyTurn(){
+  return roomState.turnPid === my.pid;
+}
+
+async function ensureStartIfReady(){
+  if(roomState.started) return;
+
+  if(canStart()){
+    // start game: turn = Player A
+    const order = roomState.order;
+    const firstPid = order[0];
+    await db.ref(`rooms/${my.room}`).update({
+      started: true,
+      stage: "game",
+      turnPid: firstPid,
+      winner: null
+    });
+  }
+}
+
+function renderGameHeader(){
+  const me = roomState.players?.[my.pid] || {};
+  $("youName").textContent = me.nickname || my.name || "You";
+  $("youDot").style.background = me.color || my.color || "#999";
+
+  const turnPid = roomState.turnPid;
+  const turnName = roomState.players?.[turnPid]?.nickname || "-";
+  $("turnName").textContent = turnName;
+
+  // show my secret (masked)
+  const digits = roomState.settings?.digits || 4;
+  const mySecret = roomState.secrets?.[my.pid] || "";
+  if(revealSecret && mySecret){
+    $("mySecretDisplay").textContent = mySecret;
+    $("secretMaskNote").textContent = "(visible)";
+  }else{
+    $("mySecretDisplay").textContent = "•".repeat(digits);
+    $("secretMaskNote").textContent = "(masked)";
+  }
+
+  // enable / disable guess
+  const disabled = !roomState.started || !!roomState.winner || !isMyTurn();
+  $("submitGuess").disabled = disabled;
+  $("clearGuess").disabled = disabled;
+  if(disabled){
+    if(roomState.winner){
+      $("lastFeedback").innerHTML = `<span class="statusLine good">Game ended. Winner: <b>${escapeHtml(roomState.winner.name||"")}</b></span>`;
+    }else{
+      $("lastFeedback").innerHTML = `<span class="statusLine warn">${isMyTurn() ? "Waiting..." : "Not your turn."}</span>`;
+    }
+  } else {
+    $("lastFeedback").innerHTML = `<span class="statusLine good">Your turn. Enter a guess.</span>`;
+  }
+
+  // show one more game button only when winner
+  if(roomState.winner) show("oneMoreGame"); else hide("oneMoreGame");
+}
+
+$("toggleSecret").onclick = () => {
+  revealSecret = !revealSecret;
+  renderGameHeader();
+};
+
+$("clearGuess").onclick = () => guessUI?.clear();
+
+$("submitGuess").onclick = async () => {
+  if(!isMyTurn()) return alert("Not your turn.");
+  if(roomState.winner) return;
+
+  const digits = roomState.settings?.digits || 4;
+  const guess = guessUI?.getValue() || "";
+  if(guess.length !== digits || guess.includes("")) return alert(`Enter exactly ${digits} digits.`);
+
+  const oppPid = myOpponentPid();
+  const oppSecret = roomState.secrets?.[oppPid];
+  if(!oppSecret) return alert("Opponent secret not ready.");
+
+  const { numCorrect, posCorrect } = countMatches(oppSecret, guess);
+  const feedback = formatFeedback(numCorrect, posCorrect);
+
+  // Write guess entry
+  const gRef = db.ref(`rooms/${my.room}/guesses`).push();
+  await gRef.set({
+    by: my.pid,
+    guess,
+    numCorrect,
+    posCorrect,
+    feedback,
+    ts: now()
+  });
+
+  // Win check
+  if(guess === oppSecret){
+    const winnerName = roomState.players?.[my.pid]?.nickname || my.name || "Winner";
+    await db.ref(`rooms/${my.room}/winner`).set({ pid: my.pid, name: winnerName, at: now() });
+    showWinnerToast(`🎉 ${winnerName} cracked the code!`);
+    return;
+  }
+
+  // Switch turn
+  const nextPid = oppPid;
+  await db.ref(`rooms/${my.room}/turnPid`).set(nextPid);
+
+  // reset local input
+  guessUI?.clear();
+};
+
+$("oneMoreGame").onclick = async () => {
+  // Reset game state, go back to lobby (same room)
+  // Keep players/order/settings but allow digit change and new secrets
+  await db.ref(`rooms/${my.room}`).update({
+    stage: "lobby",
+    started: false,
+    turnPid: null,
+    winner: null
+  });
+  await db.ref(`rooms/${my.room}/secrets`).set(null);
+  await db.ref(`rooms/${my.room}/guesses`).set(null);
+
+  // reset hasSecret flags
+  const updates = {};
+  (roomState.order||[]).forEach(pid => {
+    updates[`rooms/${my.room}/players/${pid}/hasSecret`] = false;
+  });
+  await db.ref().update(updates);
+
+  goto("step-lobby");
+};
+
+/* ==========================
+   History
+   ========================== */
+$("tabMine").onclick = () => { currentTab = "mine"; $("tabMine").classList.add("primary"); $("tabOpp").classList.remove("primary"); renderHistory(); };
+$("tabOpp").onclick  = () => { currentTab = "opp";  $("tabOpp").classList.add("primary"); $("tabMine").classList.remove("primary"); renderHistory(); };
+
+function renderHistory(){
+  const host = $("historyList");
+  host.innerHTML = "";
+
+  const guesses = roomState.guessesList || [];
+  const oppPid = myOpponentPid();
+
+  const filtered = guesses.filter(g => {
+    if(currentTab === "mine") return g.by === my.pid;
+    return g.by === oppPid;
+  });
+
+  if(filtered.length === 0){
+    host.innerHTML = `<div class="mini">No guesses yet.</div>`;
+    return;
+  }
+
+  filtered.slice().reverse().forEach(g => {
+    const byName = roomState.players?.[g.by]?.nickname || "Player";
+    const item = document.createElement("div");
+    item.className = "logItem";
+    item.innerHTML = `
+      <div class="logTop">
+        <div><span class="tag">${escapeHtml(byName)}</span></div>
+        <div class="guess">${escapeHtml(g.guess)}</div>
+      </div>
+      <div class="mini" style="margin-top:6px">
+        ${escapeHtml(g.feedback)}
+      </div>
+    `;
+    host.appendChild(item);
+  });
+}
+
+/* ==========================
+   Room listeners
+   ========================== */
+let roomUnsubs = [];
+
+function detachRoomListeners(){
+  roomUnsubs.forEach(fn => fn && fn());
+  roomUnsubs = [];
+}
+
+function attachRoomListeners(){
+  detachRoomListeners();
+
+  const base = `rooms/${my.room}`;
+
+  const on = (path, cb) => {
+    const ref = db.ref(path);
+    ref.on("value", cb);
+    roomUnsubs.push(() => ref.off("value", cb));
+  };
+
+  on(`${base}`, (snap) => {
+    const v = snap.val();
+    if(!v) return;
+    roomState.settings = v.settings || {digits:4};
+    roomState.order = v.order || [];
+    roomState.started = !!v.started;
+    roomState.turnPid = v.turnPid || null;
+    roomState.winner = v.winner || null;
+    roomState.stage = v.stage || "lobby";
+
+    $("roomTop").textContent = my.room;
+
+    // update digits UI if changed
+    const digits = roomState.settings.digits || 4;
+    $("digitsSel").value = String(digits);
+    $("digitsHint").textContent =
+      digits===3 ? "3 digits: faster, easier." :
+      digits===4 ? "4 digits: balanced." :
+      digits===5 ? "5 digits: harder." :
+      "6 digits: hardest / long game.";
+    updateDigitsUI(digits);
+
+    // route UI
+    if(roomState.stage === "game"){
+      goto("step-game");
+    } else {
+      goto("step-lobby");
+    }
+
+    // lobby text
+    $("secretStatus").innerHTML = lobbyStatusText();
+
+    // show go game button if started
+    if(roomState.stage === "lobby" && roomState.started) show("goGameBtn");
+    else hide("goGameBtn");
+
+    ensureStartIfReady().catch(()=>{});
+    renderPlayers();
+    renderGameHeader();
+    renderHistory();
+  });
+
+  on(`${base}/players`, (snap) => {
+    roomState.players = snap.val() || {};
+    renderPlayers();
+    $("secretStatus").innerHTML = lobbyStatusText();
+    ensureStartIfReady().catch(()=>{});
+    renderGameHeader();
+  });
+
+  on(`${base}/secrets`, (snap) => {
+    roomState.secrets = snap.val() || {};
+    $("secretStatus").innerHTML = lobbyStatusText();
+    ensureStartIfReady().catch(()=>{});
+    renderGameHeader();
+  });
+
+  on(`${base}/guesses`, (snap) => {
+    const obj = snap.val() || {};
+    const list = Object.entries(obj).map(([id, g]) => ({ id, ...g }));
+    list.sort((a,b) => (a.ts||0) - (b.ts||0));
+    roomState.guessesList = list;
+    renderHistory();
+  });
+
+  on(`${base}/winner`, (snap) => {
+    const w = snap.val();
+    roomState.winner = w || null;
+    if(w && w.name){
+      showWinnerToast(`🎉 ${w.name} wins!`);
+    }
+    renderGameHeader();
+  });
+}
+
+/* ==========================
+   Boot
+   ========================== */
+initTheme();
+goto("step-choose");
+
+// Basic cleanup: remove player on tab close (best-effort)
+window.addEventListener("beforeunload", () => {
+  try{
+    if(my?.room && my?.pid){
+      db.ref(`rooms/${my.room}/players/${my.pid}`).remove();
+      // also remove from order is optional; leaving simple here
+    }
+  }catch(e){}
+});
+</script>
+
+</body>
+</html>
