@@ -3,58 +3,189 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Crack the Code (2P Room)</title>
+<title>Crack the Code (2 Player Room)</title>
 
 <style>
-  /* =========================
-     THEME SYSTEM (6 themes)
-     ========================= */
+  /* =========================================================
+     MODE (Light/Dark) is separate from THEME (background style)
+     "Themes" = patterns/images + accent palette (Instagram-like)
+     ========================================================= */
+
   :root{
-    --bg:#ffffff; --card:#ffffff; --ink:#0f172a; --muted:#64748b;
-    --line:#e2e8f0; --line2:#cbd5e1; --panel:#f8fafc;
-    --accent:#2563eb; --accent2:#7c3aed; --accentText:#ffffff;
-    --good:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+    /* Mode tokens */
+    --bg:#ffffff;
+    --card:#ffffff;
+    --panel:#f8fafc;
+    --ink:#0f172a;
+    --muted:#64748b;
+    --line:#e2e8f0;
+    --line2:#cbd5e1;
+
+    /* Theme tokens */
+    --accent:#2563eb;
+    --accent2:#7c3aed;
+    --accentText:#ffffff;
+
     --shadow:0 12px 34px rgba(2,6,23,.10);
-  }
-  [data-theme="dark"]{
-    --bg:#0b1220; --card:#0f172a; --ink:#e5e7eb; --muted:#94a3b8;
-    --line:#22314a; --line2:#334155; --panel:#0b1327;
-    --accent:#60a5fa; --accent2:#a78bfa; --accentText:#07101f;
-    --shadow:0 18px 42px rgba(0,0,0,.42);
-  }
-  [data-theme="ocean"]{
-    --bg:#06131a; --card:#0a1c26; --ink:#e6f6ff; --muted:#8ad3f0;
-    --line:#0e3040; --line2:#1a465b; --panel:#07202c;
-    --accent:#06b6d4; --accent2:#3b82f6; --accentText:#041016;
-    --shadow:0 18px 42px rgba(0,0,0,.45);
-  }
-  [data-theme="sunset"]{
-    --bg:#fff7ed; --card:#ffffff; --ink:#3b1a0a; --muted:#8a4b2e;
-    --line:#fed7aa; --line2:#fdba74; --panel:#fff3e0;
-    --accent:#f97316; --accent2:#ef4444; --accentText:#1b0b06;
-    --shadow:0 12px 34px rgba(59,26,10,.12);
-  }
-  [data-theme="forest"]{
-    --bg:#f0fdf4; --card:#ffffff; --ink:#052e16; --muted:#166534;
-    --line:#bbf7d0; --line2:#86efac; --panel:#ecfdf5;
-    --accent:#16a34a; --accent2:#0ea5e9; --accentText:#04120a;
-    --shadow:0 12px 34px rgba(5,46,22,.12);
-  }
-  [data-theme="candy"]{
-    --bg:#fff1f2; --card:#ffffff; --ink:#3f0d1f; --muted:#9f1239;
-    --line:#fecdd3; --line2:#fda4af; --panel:#fff5f7;
-    --accent:#ec4899; --accent2:#a855f7; --accentText:#1a0710;
-    --shadow:0 12px 34px rgba(63,13,31,.12);
+
+    /* Theme visuals */
+    --bgImg:none;
+    --bgOverlay: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.78));
+    --cardTint: rgba(255,255,255,.92);
+    --panelTint: rgba(248,250,252,.92);
   }
 
+  [data-mode="dark"]{
+    --bg:#0b1220;
+    --card:#0f172a;
+    --panel:#0b1327;
+    --ink:#e5e7eb;
+    --muted:#94a3b8;
+    --line:#22314a;
+    --line2:#334155;
+
+    --accentText:#07101f;
+
+    --shadow:0 18px 42px rgba(0,0,0,.42);
+
+    --bgOverlay: linear-gradient(180deg, rgba(5,10,20,.72), rgba(5,10,20,.72));
+    --cardTint: rgba(15,23,42,.88);
+    --panelTint: rgba(11,19,39,.88);
+  }
+
+  /* =========================
+     Themes (patterns/images)
+     ========================= */
+
+  /* Soft: Blush */
+  [data-theme="blush"]{
+    --bgImg: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'>\
+<rect width='260' height='260' fill='%23fff1f2'/>\
+<g fill='%23fda4af' fill-opacity='0.35'>\
+<path d='M64 70c-10-10-26-10-36 0-10 10-10 26 0 36l36 36 36-36c10-10 10-26 0-36-10-10-26-10-36 0z'/>\
+<path d='M190 170c-9-9-23-9-32 0-9 9-9 23 0 32l32 32 32-32c9-9 9-23 0-32-9-9-23-9-32 0z'/>\
+</g>\
+<g fill='%23fb7185' fill-opacity='0.18'>\
+<circle cx='185' cy='78' r='10'/><circle cx='78' cy='198' r='12'/>\
+</g>\
+</svg>");
+    --accent:#ec4899;
+    --accent2:#a855f7;
+  }
+
+  /* Soft: Lavender */
+  [data-theme="lavender"]{
+    --bgImg: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'>\
+<rect width='280' height='280' fill='%23faf5ff'/>\
+<g stroke='%23c4b5fd' stroke-width='3' stroke-opacity='0.35'>\
+<path d='M56 48l0 24M44 60l24 0'/>\
+<path d='M220 78l0 24M208 90l24 0'/>\
+<path d='M170 220l0 24M158 232l24 0'/>\
+</g>\
+<g fill='%23a78bfa' fill-opacity='0.15'>\
+<circle cx='132' cy='132' r='60'/>\
+</g>\
+</svg>");
+    --accent:#7c3aed;
+    --accent2:#2563eb;
+  }
+
+  /* Soft: Sky */
+  [data-theme="sky"]{
+    --bgImg: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'>\
+<rect width='280' height='280' fill='%23ecfeff'/>\
+<g fill='%2367e8f9' fill-opacity='0.25'>\
+<circle cx='78' cy='78' r='22'/><circle cx='108' cy='78' r='18'/><circle cx='94' cy='62' r='14'/>\
+<circle cx='205' cy='165' r='20'/><circle cx='233' cy='165' r='16'/><circle cx='219' cy='149' r='12'/>\
+</g>\
+<g fill='%2306b6d4' fill-opacity='0.12'>\
+<circle cx='142' cy='240' r='42'/>\
+</g>\
+</svg>");
+    --accent:#06b6d4;
+    --accent2:#3b82f6;
+  }
+
+  /* Cool: Neon Lines */
+  [data-theme="neon"]{
+    --bgImg: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'>\
+<rect width='300' height='300' fill='%230b1220'/>\
+<g stroke='%2322d3ee' stroke-opacity='0.35' stroke-width='3'>\
+<path d='M-30 55 L330 10'/><path d='M-30 130 L330 85'/><path d='M-30 205 L330 160'/><path d='M-30 280 L330 235'/>\
+</g>\
+<g stroke='%23a78bfa' stroke-opacity='0.25' stroke-width='2'>\
+<path d='M-20 20 L320 70'/><path d='M-20 95 L320 145'/><path d='M-20 170 L320 220'/>\
+</g>\
+</svg>");
+    --accent:#22d3ee;
+    --accent2:#a78bfa;
+  }
+
+  /* Cool: Racer (checkered + stripe) */
+  [data-theme="racer"]{
+    --bgImg: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'>\
+<rect width='260' height='260' fill='%23f8fafc'/>\
+<g fill='%230f172a' fill-opacity='0.06'>\
+<rect x='0' y='0' width='32' height='32'/><rect x='64' y='0' width='32' height='32'/><rect x='128' y='0' width='32' height='32'/><rect x='192' y='0' width='32' height='32'/>\
+<rect x='32' y='32' width='32' height='32'/><rect x='96' y='32' width='32' height='32'/><rect x='160' y='32' width='32' height='32'/><rect x='224' y='32' width='32' height='32'/>\
+<rect x='0' y='64' width='32' height='32'/><rect x='64' y='64' width='32' height='32'/><rect x='128' y='64' width='32' height='32'/><rect x='192' y='64' width='32' height='32'/>\
+</g>\
+<path d='M-20 185 L280 130' stroke='%23ef4444' stroke-width='20' stroke-opacity='0.18'/>\
+</svg>");
+    --accent:#ef4444;
+    --accent2:#111827;
+  }
+
+  /* Cool: Carbon Weave */
+  [data-theme="carbon"]{
+    --bgImg: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'>\
+<rect width='240' height='240' fill='%230b1220'/>\
+<g fill='%23ffffff' fill-opacity='0.045'>\
+<path d='M0 22 L22 0 L132 0 L110 22 Z'/><path d='M110 22 L132 0 L240 0 L218 22 Z'/>\
+<path d='M0 132 L22 110 L132 110 L110 132 Z'/><path d='M110 132 L132 110 L240 110 L218 132 Z'/>\
+</g>\
+<g fill='%23ffffff' fill-opacity='0.03'>\
+<path d='M22 0 L44 22 L154 22 L132 0 Z'/><path d='M132 0 L154 22 L240 22 L218 0 Z'/>\
+<path d='M22 110 L44 132 L154 132 L132 110 Z'/><path d='M132 110 L154 132 L240 132 L218 110 Z'/>\
+</g>\
+</svg>");
+    --accent:#22c55e;
+    --accent2:#60a5fa;
+  }
+
+  /* =========================
+     Base layout
+     ========================= */
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,Segoe UI,Roboto,Arial,sans-serif}
-  .wrap{max-width:1050px;margin:20px auto;padding:16px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+  body{
+    margin:0;
+    background: var(--bgOverlay), var(--bgImg), var(--bg);
+    background-size:auto, 280px 280px, auto;
+    color:var(--ink);
+    font:16px/1.45 system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  }
+  .wrap{max-width:1050px;margin:18px auto;padding:16px}
+  .card{
+    background:var(--cardTint);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:var(--shadow);
+    backdrop-filter: blur(6px);
+  }
   h1{
-    margin:8px 0 10px;font-weight:950;text-align:center;font-size:32px;letter-spacing:.2px;
+    margin:8px 0 10px;
+    font-weight:950;
+    text-align:center;
+    font-size:32px;
     background:linear-gradient(90deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text;background-clip:text;color:transparent
+    -webkit-background-clip:text;background-clip:text;color:transparent;
   }
 
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
@@ -62,187 +193,202 @@
   .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;background:transparent}
   .dot{width:12px;height:12px;border-radius:50%}
 
-  .btnRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .iconBtn{
-    display:inline-flex;align-items:center;gap:8px;
-    border:1px solid var(--line2);
-    background:var(--panel);
-    color:var(--ink);
+  button{border:0;background:transparent;cursor:pointer;font-weight:900;color:var(--ink)}
+  button:focus{outline:none}
+  .btnRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+  /* round icon buttons (no outline, clean) */
+  .round{
+    width:36px;height:36px;
+    display:inline-flex;align-items:center;justify-content:center;
     border-radius:999px;
-    padding:9px 12px;
-    cursor:pointer;
-    font-weight:900;
+    background:var(--panelTint);
+    border:0;
+    box-shadow:0 6px 18px rgba(2,6,23,.06);
     transition:transform .06s ease, filter .12s ease;
   }
-  .iconBtn:hover{filter:brightness(1.02)}
-  .iconBtn:active{transform:translateY(1px)}
-  .primary{
+  .round:hover{filter:brightness(1.02)}
+  .round:active{transform:translateY(1px)}
+
+  .themeBtn{
+    width:36px;height:36px;
+    border-radius:999px;
+    background:var(--panelTint);
+    border:0;
+    display:inline-flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(2,6,23,.06);
+  }
+  .themeBtn .sw{
+    width:16px;height:16px;border-radius:6px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+  }
+
+  .modeBtn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 12px;
+    border-radius:999px;
     background:linear-gradient(90deg,var(--accent),var(--accent2));
-    border-color:transparent;
     color:var(--accentText);
+    font-weight:950;
+    box-shadow:0 10px 26px rgba(2,6,23,.14);
   }
-  button{
-    border:1px solid var(--line2);background:var(--panel);
-    border-radius:14px;padding:10px 14px;cursor:pointer;font-weight:900;color:var(--ink)
-  }
-  button.primary{
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    border-color:transparent;color:var(--accentText)
-  }
-  button.ghost{background:transparent}
-  button:disabled{opacity:.55;cursor:not-allowed}
 
   input[type=text], select{
-    width:100%;border:1px solid var(--line2);border-radius:14px;padding:10px 12px;
-    background:transparent;color:var(--ink);outline:none
+    width:100%;
+    border:1px solid var(--line2);
+    border-radius:14px;
+    padding:10px 12px;
+    background:var(--panelTint);
+    color:var(--ink);
+    outline:none;
+    backdrop-filter: blur(6px);
   }
   select{cursor:pointer}
   .hr{height:1px;background:var(--line);margin:14px 0;border-radius:1px}
   .center{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
   .hidden{display:none !important}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .row3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px}
-  @media(max-width:900px){ .row2,.row3{grid-template-columns:1fr} }
+  @media(max-width:900px){ .row2{grid-template-columns:1fr} }
 
   .panel{
-    background:var(--panel);
+    background:var(--panelTint);
     border:1px solid var(--line);
     border-radius:16px;
     padding:12px;
+    backdrop-filter: blur(6px);
   }
   .title{font-weight:950;margin:2px 0 6px}
 
-  /* GAME */
-  .gameGrid{
-    display:grid;
-    grid-template-columns: 1.2fr .8fr;
-    gap:14px;
-    align-items:start;
+  .primaryBtn{
+    border-radius:14px;
+    padding:10px 14px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:var(--accentText);
+    font-weight:950;
+    box-shadow:0 12px 28px rgba(2,6,23,.14);
   }
-  @media(max-width:900px){ .gameGrid{grid-template-columns:1fr} }
+  .softBtn{
+    border:1px solid var(--line2);
+    background:var(--panelTint);
+    border-radius:14px;
+    padding:10px 14px;
+    font-weight:950;
+  }
+  .softBtn:disabled,.primaryBtn:disabled{opacity:.55;cursor:not-allowed}
 
+  /* GAME */
+  .gameGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:start}
+  @media(max-width:900px){ .gameGrid{grid-template-columns:1fr} }
   .turnBanner{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
   .bigSecret{
     font-size:28px;font-weight:1000;letter-spacing:6px;
     padding:10px 14px;border-radius:16px;border:1px dashed var(--line2);
-    display:inline-flex;align-items:center;gap:10px;
-    background:transparent;
+    display:inline-flex;align-items:center;gap:10px;background:transparent;
   }
-
   .boxes{display:flex;gap:8px;flex-wrap:wrap}
-  .digitBox{
-    width:54px;height:54px;border-radius:16px;border:1px solid var(--line2);
-    display:flex;align-items:center;justify-content:center;
+  .digitBox{width:54px;height:54px;border-radius:16px;border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;background:transparent}
+  .digitBox input{width:100%;height:100%;border:0;outline:none;background:transparent;color:var(--ink);text-align:center;font-size:20px;font-weight:950}
+  .statusLine{font-weight:950}
+  .statusLine.good{color:#16a34a}
+  .statusLine.warn{color:#f59e0b}
+
+  /* LOBBY players list (status next to name on left) */
+  .playerLine{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:10px 12px;
+    margin-top:8px;
     background:transparent;
   }
-  .digitBox input{
-    width:100%;height:100%;
-    border:0;outline:none;
-    background:transparent;color:var(--ink);
-    text-align:center;font-size:20px;font-weight:950;
-  }
-
-  .statusLine{font-weight:950}
-  .statusLine.good{color:var(--good)}
-  .statusLine.warn{color:var(--warn)}
-  .statusLine.bad{color:var(--bad)}
+  .pLeft{display:flex;align-items:center;gap:10px;min-width:0}
+  .pName{font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pStatus{font-size:12px;margin-top:2px}
+  .pStatus.ok{color:#16a34a}
+  .pStatus.wait{color:#f59e0b}
+  .roleTag{font-size:11px;font-weight:950;padding:3px 10px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
 
   /* HISTORY */
   .history{max-height:360px;overflow:auto;padding-right:6px}
-  .logItem{
-    border:1px solid var(--line);
-    background:transparent;
-    border-radius:14px;
-    padding:10px 10px;
-    margin:8px 0;
-  }
+  .logItem{border:1px solid var(--line);border-radius:14px;padding:10px 10px;margin:8px 0;background:transparent}
   .logTop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-end}
   .tag{font-size:11px;font-weight:950;padding:3px 8px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
-  .guess{
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    font-size:18px;font-weight:950;letter-spacing:3px;
-  }
+  .guess{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;font-size:18px;font-weight:950;letter-spacing:3px}
   .ago{font-size:11px;color:var(--muted);margin-top:4px}
 
   .smallTabs{display:flex;gap:8px}
-  .smallTabs button{padding:7px 10px;border-radius:12px;font-size:13px}
+  .smallTabs button{padding:7px 10px;border-radius:12px;font-size:13px;border:1px solid var(--line2);background:var(--panelTint)}
+  .smallTabs button.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:var(--accentText);border-color:transparent}
 
   /* MODALS */
-  .modalBack{
-    position:fixed;inset:0;background:rgba(0,0,0,.55);
-    display:none;align-items:center;justify-content:center;z-index:9999;
-    padding:16px;
-  }
+  .modalBack{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px}
   .modalBack.show{display:flex}
-  .modal{
-    max-width:760px;width:100%;
-    background:var(--card);border:1px solid var(--line);
-    border-radius:18px;padding:16px;box-shadow:var(--shadow);
-  }
+  .modal{max-width:780px;width:100%;background:var(--cardTint);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);backdrop-filter: blur(8px)}
   .modal h2{margin:0 0 10px;font-size:22px}
-  .modal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;flex-wrap:wrap}
-  .winnerName{
-    font-size:28px;font-weight:1000;
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
+  .winnerName{font-size:28px;font-weight:1000;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
 
-  /* CONFETTI (new) */
-  .confetti{
-    position:fixed; inset:0; pointer-events:none; z-index:9998; overflow:hidden;
-  }
-  .confetti i{
-    position:absolute; top:-20px;
-    width:10px; height:14px; border-radius:3px;
-    opacity:.95;
-    animation:confFall linear forwards;
-  }
-  @keyframes confFall{
-    to{
-      transform: translateY(110vh) rotate(720deg);
-      opacity: 1;
-    }
-  }
+  /* CONFETTI */
+  .confetti{position:fixed; inset:0; pointer-events:none; z-index:9998; overflow:hidden;}
+  .confetti i{position:absolute; top:-20px; width:10px; height:14px; border-radius:3px; opacity:.95; animation:confFall linear forwards;}
+  @keyframes confFall{to{transform: translateY(110vh) rotate(720deg); opacity: 1;}}
 </style>
 </head>
 
 <body>
 <div class="confetti" id="confetti"></div>
 
+<!-- Theme Picker Modal -->
+<div class="modalBack" id="themeBack">
+  <div class="modal">
+    <h2>Choose a theme</h2>
+    <div class="mini" style="margin-bottom:10px">Theme changes background style. Dark/Light changes mode.</div>
+
+    <div class="row2">
+      <button class="softBtn" data-theme-pick="blush">💗 Blush (soft)</button>
+      <button class="softBtn" data-theme-pick="lavender">💜 Lavender (soft)</button>
+      <button class="softBtn" data-theme-pick="sky">🩵 Sky (soft)</button>
+      <button class="softBtn" data-theme-pick="neon">✨ Neon (cool)</button>
+      <button class="softBtn" data-theme-pick="racer">🏁 Racer (cool)</button>
+      <button class="softBtn" data-theme-pick="carbon">🖤 Carbon (cool)</button>
+    </div>
+
+    <div class="center" style="justify-content:flex-end;margin-top:12px">
+      <button id="themeClose" class="softBtn">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Rules Modal -->
 <div class="modalBack" id="rulesBack">
   <div class="modal">
-    <h2>How to Play — Crack the Code</h2>
-    <div class="mini" style="margin-bottom:10px">
-      2 players • Same room • Turn-by-turn guessing • First to crack the opponent's code wins.
-    </div>
+    <h2>How to Play</h2>
+    <div class="mini" style="margin-bottom:10px">2 players • turn-by-turn • first to crack opponent’s code wins.</div>
 
     <div class="panel" style="margin-bottom:10px">
       <div class="title">Lobby</div>
       <ul style="margin:6px 0 0 18px">
-        <li>Player A creates a room and shares the <b>Room Code</b>.</li>
-        <li>Player B joins using the same code.</li>
-        <li>Choose digits (3/4/5/6). If digits change, secrets reset automatically.</li>
-        <li>Each player locks their own secret (example: <b>7590</b>).</li>
+        <li>Create room → share room code → second player joins.</li>
+        <li>Select digits (3/4/5/6). Changing digits resets secrets automatically.</li>
+        <li>Both players lock a secret to start.</li>
       </ul>
     </div>
 
     <div class="panel">
-      <div class="title">Turns & Feedback</div>
+      <div class="title">Guessing</div>
       <ul style="margin:6px 0 0 18px">
-        <li>On your turn, enter a guess with the same number of digits.</li>
-        <li>Feedback shows:
+        <li>Enter a guess with the same digit count.</li>
+        <li>Feedback:
           <ul>
-            <li><b>X numbers correct</b> (correct digits anywhere)</li>
-            <li><b>Y positions correct</b> (correct digit + correct place)</li>
+            <li><b>X numbers correct</b> (digits exist anywhere)</li>
+            <li><b>Y positions correct</b> (digit + position correct)</li>
           </ul>
         </li>
-        <li>History stores all guesses and feedback for strategy.</li>
+        <li>History shows guesses + feedback + time (e.g., 12s ago).</li>
       </ul>
     </div>
 
-    <div class="actions">
-      <button id="closeRules" class="primary">Got it</button>
+    <div class="center" style="justify-content:flex-end;margin-top:12px">
+      <button id="closeRules" class="primaryBtn">Got it</button>
     </div>
   </div>
 </div>
@@ -252,10 +398,10 @@
   <div class="modal">
     <h2>🏆 Winner</h2>
     <div class="winnerName" id="winnerName">-</div>
-    <div class="mini" style="margin-top:6px">Click “One more game” to return to the lobby and play again.</div>
-    <div class="actions">
-      <button id="winnerNext" class="primary">🔁 One more game</button>
-      <button id="winnerClose">Close</button>
+    <div class="mini" style="margin-top:6px">Click “One more game” to go back to lobby.</div>
+    <div class="center" style="justify-content:flex-end;margin-top:12px">
+      <button id="winnerNext" class="primaryBtn">🔁 One more game</button>
+      <button id="winnerClose" class="softBtn">Close</button>
     </div>
   </div>
 </div>
@@ -267,37 +413,29 @@
       <div class="pill" style="gap:10px">
         <span class="mini">Room</span>
         <b id="roomTop">-</b>
-        <button id="copyRoom" class="iconBtn" style="padding:7px 10px;border-radius:999px">📋 Copy</button>
+        <!-- Copy ONLY visible in lobby -->
+        <button id="copyRoom" class="softBtn" style="padding:7px 10px;border-radius:999px;display:none">📋 Copy</button>
       </div>
 
+      <!-- Top right: (i), (themes), Dark/Light -->
       <div class="btnRow">
-        <button id="rulesBtn" class="iconBtn">ℹ️ Rules</button>
-
-        <select id="themeSel" class="iconBtn" style="padding:9px 12px">
-          <option value="random">🎲 Random theme</option>
-          <option value="light">☀️ Light</option>
-          <option value="dark">🌙 Dark</option>
-          <option value="ocean">🌊 Ocean</option>
-          <option value="sunset">🌅 Sunset</option>
-          <option value="forest">🌿 Forest</option>
-          <option value="candy">🍬 Candy</option>
-        </select>
-
-        <button id="themeRand" class="iconBtn primary">🎨 Shuffle</button>
+        <button id="rulesBtn" class="round" title="Rules"><b>i</b></button>
+        <button id="themeBtn" class="themeBtn" title="Themes"><span class="sw"></span></button>
+        <button id="modeBtn" class="modeBtn" title="Dark/Light">🌙 Dark</button>
       </div>
     </div>
 
     <h1>Crack the Code</h1>
 
-    <!-- TIP moved to first page -->
-    <div class="mini" id="tipLine" style="text-align:center;margin-bottom:12px">
+    <!-- Tip ONLY on very first screen -->
+    <div id="tipLine" class="mini" style="text-align:center;margin-bottom:12px">
       Tip: If you leave name empty, default will be Player A / Player B.
     </div>
 
     <!-- Step: Choose -->
     <div id="step-choose" class="center" style="margin:8px 0 6px">
-      <button id="btnCreate" class="primary">Create Room</button>
-      <button id="btnJoin">Join Room</button>
+      <button id="btnCreate" class="primaryBtn">Create Room</button>
+      <button id="btnJoin" class="softBtn">Join Room</button>
     </div>
 
     <!-- Create -->
@@ -313,8 +451,8 @@
         </div>
       </div>
       <div class="center" style="margin-top:10px">
-        <button id="createGo" class="primary">Create & Enter Lobby</button>
-        <button id="back1">Back</button>
+        <button id="createGo" class="primaryBtn">Create & Enter Lobby</button>
+        <button id="back1" class="softBtn">Back</button>
       </div>
     </div>
 
@@ -331,34 +469,18 @@
         </div>
       </div>
       <div class="center" style="margin-top:10px">
-        <button id="joinGo" class="primary">Join Lobby</button>
-        <button id="back2">Back</button>
+        <button id="joinGo" class="primaryBtn">Join Lobby</button>
+        <button id="back2" class="softBtn">Back</button>
       </div>
     </div>
 
-    <!-- Lobby (redesigned simple) -->
+    <!-- Lobby -->
     <div id="step-lobby" class="hidden">
       <div class="row2">
         <div class="panel">
-          <div class="title">Players</div>
-          <div class="mini" style="margin-bottom:10px">You can keep defaults or type your names.</div>
-
-          <div class="row2">
-            <div>
-              <div class="mini">Player A</div>
-              <input id="nameA" type="text" placeholder="Player A" />
-            </div>
-            <div>
-              <div class="mini">Player B</div>
-              <input id="nameB" type="text" placeholder="Player B" />
-            </div>
-          </div>
-
-          <div class="center" style="margin-top:10px;justify-content:flex-start">
-            <button id="saveNames" class="primary">Save Names</button>
-          </div>
-
-          <div class="mini" style="margin-top:10px" id="nameStatus"></div>
+          <div class="title">Lobby</div>
+          <div class="mini">2 players only • status updates automatically.</div>
+          <div id="playersList"></div>
         </div>
 
         <div class="panel">
@@ -372,9 +494,7 @@
             <option value="6">6 digits (≈ 35–60 min)</option>
           </select>
 
-          <div class="mini" style="margin-top:8px" id="digitsHint">
-            Changing digits will reset secrets automatically.
-          </div>
+          <div class="mini" style="margin-top:8px">Changing digits resets secrets automatically.</div>
 
           <div class="hr"></div>
 
@@ -385,8 +505,8 @@
           <div class="boxes" id="secretBoxes"></div>
 
           <div class="center" style="margin-top:10px;justify-content:flex-start">
-            <button id="setSecretBtn" class="primary">Lock Secret</button>
-            <button id="clearSecretBtn">Clear</button>
+            <button id="setSecretBtn" class="primaryBtn">Lock Secret</button>
+            <button id="clearSecretBtn" class="softBtn">Clear</button>
           </div>
 
           <div class="mini" style="margin-top:10px" id="secretStatus"></div>
@@ -395,14 +515,13 @@
 
       <div class="hr"></div>
       <div class="center">
-        <button id="goGameBtn" class="primary hidden">Go to Game</button>
+        <button id="goGameBtn" class="primaryBtn hidden">Go to Game</button>
       </div>
     </div>
 
     <!-- Game -->
     <div id="step-game" class="hidden">
       <div class="gameGrid">
-
         <!-- Left -->
         <div class="panel">
           <div class="turnBanner">
@@ -419,7 +538,7 @@
           <div class="title">Your secret</div>
           <div class="bigSecret">
             <span id="mySecretDisplay">••••</span>
-            <button id="toggleSecret" class="iconBtn" style="padding:7px 10px">👁️</button>
+            <button id="toggleSecret" class="round" title="Show/Hide">👁️</button>
           </div>
 
           <div class="hr"></div>
@@ -432,15 +551,15 @@
           <div class="boxes" id="guessBoxes"></div>
 
           <div class="center" style="margin-top:10px;justify-content:flex-start">
-            <button id="submitGuess" class="primary">Submit Guess</button>
-            <button id="clearGuess">Clear</button>
+            <button id="submitGuess" class="primaryBtn">Submit Guess</button>
+            <button id="clearGuess" class="softBtn">Clear</button>
           </div>
 
-          <div class="mini" style="margin-top:10px" id="lastFeedback">Waiting...</div>
+          <div class="mini" style="margin-top:10px" id="lastFeedback">Waiting…</div>
 
           <div class="hr"></div>
           <div class="center" style="justify-content:flex-end">
-            <button id="oneMoreGame" class="primary hidden">🔁 One more game</button>
+            <button id="oneMoreGame" class="primaryBtn hidden">🔁 One more game</button>
           </div>
         </div>
 
@@ -449,14 +568,13 @@
           <div class="title">History</div>
 
           <div class="smallTabs" style="margin-top:8px">
-            <button id="tabMine" class="primary">Mine</button>
+            <button id="tabMine" class="active">Mine</button>
             <button id="tabOpp">Opponent</button>
           </div>
 
           <div class="hr"></div>
           <div class="history" id="historyList"></div>
         </div>
-
       </div>
     </div>
 
@@ -472,21 +590,50 @@
    Firebase Config (REPLACE)
    ========================== */
 const firebaseConfig = {
-  apiKey: "AIzaSyDIL-Awme_yTv9Jt7tSdX2WI2BkOlbHTlI",
-  authDomain: "crack-the-code-game-35615.firebaseapp.com",
-  projectId: "crack-the-code-game-35615",
-  storageBucket: "crack-the-code-game-35615.firebasestorage.app",
-  messagingSenderId: "281951990500",
-  appId: "1:281951990500:web:ab19ad486b05477e06b2f1"
+  apiKey: "REPLACE_ME",
+  authDomain: "REPLACE_ME",
+  databaseURL: "REPLACE_ME",
+  projectId: "REPLACE_ME",
+  storageBucket: "REPLACE_ME",
+  messagingSenderId: "REPLACE_ME",
+  appId: "REPLACE_ME"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 /* ==========================
+   Theme + Mode boot
+   - Theme loads on first screen (random if none saved)
+   - Dark/Light is separate from theme
+   ========================== */
+const THEMES = ["blush","lavender","sky","neon","racer","carbon"];
+
+function setTheme(theme){
+  if(!THEMES.includes(theme)) theme = "blush";
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("ctc_theme", theme);
+}
+function setMode(mode){
+  mode = (mode === "dark") ? "dark" : "light";
+  document.documentElement.setAttribute("data-mode", mode);
+  localStorage.setItem("ctc_mode", mode);
+  document.getElementById("modeBtn").textContent = (mode === "dark") ? "☀️ Light" : "🌙 Dark";
+}
+function initThemeAndMode(){
+  const savedTheme = localStorage.getItem("ctc_theme");
+  const theme = (savedTheme && THEMES.includes(savedTheme))
+    ? savedTheme
+    : THEMES[Math.floor(Math.random()*THEMES.length)];
+  setTheme(theme);
+
+  const savedMode = localStorage.getItem("ctc_mode");
+  setMode(savedMode === "dark" ? "dark" : "light");
+}
+
+/* ==========================
    State
    ========================== */
-const THEMES = ["light","dark","ocean","sunset","forest","candy"];
 const PASTEL = ["#ff6b6b","#60a5fa","#34d399","#fbbf24","#a78bfa","#22d3ee","#f472b6","#86efac"];
 
 let my = { pid:null, name:"", color:"", room:"" };
@@ -507,6 +654,9 @@ let currentTab = "mine";
 let revealSecret = false;
 let elapsedTimer = null;
 
+let secretUI = null;
+let guessUI = null;
+
 /* ==========================
    Helpers
    ========================== */
@@ -514,30 +664,12 @@ const $ = id => document.getElementById(id);
 const show = id => $(id).classList.remove("hidden");
 const hide = id => $(id).classList.add("hidden");
 
-function code(){ return Math.random().toString(36).substring(2,7).toUpperCase(); }
+function roomCode(){ return Math.random().toString(36).substring(2,7).toUpperCase(); }
 function now(){ return Date.now(); }
-
-function setTheme(theme){
-  document.documentElement.setAttribute("data-theme", theme);
-  localStorage.setItem("ctc_theme", theme);
-  $("themeSel").value = theme;
-}
-function pickRandomTheme(){
-  return THEMES[Math.floor(Math.random()*THEMES.length)];
-}
-function initTheme(){
-  const saved = localStorage.getItem("ctc_theme");
-  const theme = saved && THEMES.includes(saved) ? saved : pickRandomTheme();
-  setTheme(theme);
-}
-function shuffleTheme(){
-  setTheme(pickRandomTheme());
-}
 
 function escapeHtml(s){
   return (s||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
-
 function agoText(ts){
   const d = Math.max(0, now() - (ts||now()));
   const sec = Math.floor(d/1000);
@@ -550,16 +682,21 @@ function agoText(ts){
   const day = Math.floor(hr/24);
   return `${day}d ago`;
 }
+function validDigitsString(val, digits){
+  return new RegExp(`^\\d{${digits}}$`).test((val||"").trim());
+}
 
 function buildDigitBoxes(hostId, digits, opts={}){
   const host = $(hostId);
   host.innerHTML = "";
   const inputs = [];
 
+  const getValue = () => inputs.map(x => x.value).join("");
   const focusFirstEmpty = () => {
     const firstEmpty = inputs.find(i => !i.value);
     (firstEmpty || inputs[0])?.focus();
   };
+  const clear = () => { inputs.forEach(i => i.value=""); focusFirstEmpty(); };
 
   for(let i=0;i<digits;i++){
     const wrap = document.createElement("div");
@@ -574,10 +711,7 @@ function buildDigitBoxes(hostId, digits, opts={}){
     inp.addEventListener("input", () => {
       inp.value = inp.value.replace(/[^0-9]/g,"").slice(0,1);
       if(inp.value && i < digits-1) inputs[i+1].focus();
-
-      if(opts.onChange){
-        opts.onChange(getValue());
-      }
+      opts.onChange && opts.onChange(getValue());
     });
 
     inp.addEventListener("keydown", (e) => {
@@ -585,8 +719,7 @@ function buildDigitBoxes(hostId, digits, opts={}){
         inputs[i-1].focus();
       }
       if(e.key === "Enter"){
-        const v = getValue();
-        if(opts.onEnter) opts.onEnter(v);
+        opts.onEnter && opts.onEnter(getValue());
       }
     });
 
@@ -595,27 +728,15 @@ function buildDigitBoxes(hostId, digits, opts={}){
     inputs.push(inp);
   }
 
-  const getValue = () => inputs.map(x => x.value).join("");
-  const clear = () => { inputs.forEach(i => i.value=""); focusFirstEmpty(); };
-
-  // public api
-  return {
-    focus: focusFirstEmpty,
-    getValue,
-    clear
-  };
+  return { focus: focusFirstEmpty, getValue, clear };
 }
 
 function countMatches(secret, guess){
   const n = secret.length;
-
   let posCorrect = 0;
-  for(let i=0;i<n;i++){
-    if(secret[i] === guess[i]) posCorrect++;
-  }
+  for(let i=0;i<n;i++){ if(secret[i] === guess[i]) posCorrect++; }
 
-  const freqS = {};
-  const freqG = {};
+  const freqS = {}, freqG = {};
   for(const ch of secret){ freqS[ch] = (freqS[ch]||0)+1; }
   for(const ch of guess){  freqG[ch] = (freqG[ch]||0)+1; }
 
@@ -623,30 +744,20 @@ function countMatches(secret, guess){
   for(const d in freqS){
     if(freqG[d]) numCorrect += Math.min(freqS[d], freqG[d]);
   }
-
   return { numCorrect, posCorrect };
 }
-
 function formatFeedback(numCorrect, posCorrect){
-  const n = numCorrect;
-  const p = posCorrect;
-  const numTxt = `${n} number${n===1?"":"s"} correct`;
-  const posTxt = `${p} position${p===1?"":"s"} correct`;
-  return `${numTxt}, ${posTxt}`;
-}
-
-function validDigitsString(val, digits){
-  return new RegExp(`^\\d{${digits}}$`).test((val||"").trim());
+  const n = numCorrect, p = posCorrect;
+  return `${n} number${n===1?"":"s"} correct, ${p} position${p===1?"":"s"} correct`;
 }
 
 /* ==========================
-   Confetti (new)
+   Confetti (paper pieces)
    ========================== */
 function launchConfetti(){
   const c=$("confetti"); c.innerHTML="";
   const colors=["#ef4444","#f59e0b","#10b981","#3b82f6","#a855f7","#22d3ee","#f472b6","#84cc16"];
   const pieces = 220;
-
   for(let i=0;i<pieces;i++){
     const p=document.createElement("i");
     const w = 6 + Math.random()*8;
@@ -661,7 +772,6 @@ function launchConfetti(){
     p.style.animationDelay = (Math.random()*0.15) + "s";
     c.appendChild(p);
   }
-
   setTimeout(()=>{ c.innerHTML=""; }, 3800);
 }
 
@@ -671,34 +781,53 @@ function launchConfetti(){
 function goto(step){
   ["step-choose","step-create","step-join","step-lobby","step-game"].forEach(hide);
   show(step);
+
+  // Tip only on first screen
+  $("tipLine").style.display = (step === "step-choose") ? "block" : "none";
+
+  // Copy ONLY on lobby
+  $("copyRoom").style.display = (step === "step-lobby") ? "inline-flex" : "none";
 }
 
-$("btnCreate").onclick = () => { goto("step-create"); $("createCode").value = code(); };
+$("btnCreate").onclick = () => { goto("step-create"); $("createCode").value = roomCode(); };
 $("btnJoin").onclick = () => goto("step-join");
 $("back1").onclick = () => goto("step-choose");
 $("back2").onclick = () => goto("step-choose");
 
+/* Rules modal */
 $("rulesBtn").onclick = () => $("rulesBack").classList.add("show");
 $("closeRules").onclick = () => $("rulesBack").classList.remove("show");
 $("rulesBack").onclick = (e) => { if(e.target.id === "rulesBack") $("rulesBack").classList.remove("show"); };
 
+/* Theme modal */
+$("themeBtn").onclick = () => $("themeBack").classList.add("show");
+$("themeClose").onclick = () => $("themeBack").classList.remove("show");
+$("themeBack").onclick = (e) => { if(e.target.id === "themeBack") $("themeBack").classList.remove("show"); };
+document.querySelectorAll("[data-theme-pick]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    setTheme(btn.getAttribute("data-theme-pick"));
+    $("themeBack").classList.remove("show");
+  });
+});
+
+/* Mode toggle */
+$("modeBtn").onclick = () => {
+  const cur = document.documentElement.getAttribute("data-mode") || "light";
+  setMode(cur === "dark" ? "light" : "dark");
+};
+
+/* Winner modal */
 $("winnerClose").onclick = () => $("winnerBack").classList.remove("show");
 $("winnerBack").onclick = (e) => { if(e.target.id === "winnerBack") $("winnerBack").classList.remove("show"); };
 
-$("themeRand").onclick = shuffleTheme;
-$("themeSel").onchange = () => {
-  const v = $("themeSel").value;
-  if(v === "random") shuffleTheme();
-  else setTheme(v);
-};
-
+/* Copy room code (only visible on lobby) */
 $("copyRoom").onclick = async () => {
   const r = $("roomTop").textContent || "";
   if(!r || r === "-") return;
   try{
     await navigator.clipboard.writeText(r);
-    $("copyRoom").textContent = "✅ Copied";
-    setTimeout(()=> $("copyRoom").textContent = "📋 Copy", 900);
+    $("copyRoom").textContent = "✅";
+    setTimeout(()=> $("copyRoom").textContent = "📋 Copy", 800);
   }catch(e){
     alert("Copy failed. Please copy manually.");
   }
@@ -706,6 +835,7 @@ $("copyRoom").onclick = async () => {
 
 /* ==========================
    Create / Join Room
+   - Player name input ONLY here
    ========================== */
 async function createOrJoin({mode, nickname, roomCode}){
   const room = roomCode.trim().toUpperCase();
@@ -716,6 +846,7 @@ async function createOrJoin({mode, nickname, roomCode}){
 
   if(mode === "create"){
     if(snap.exists()) return alert("Room already exists. Try a new code.");
+
     const pid = "p" + Date.now();
     my = { pid, name: nickname.trim() || "Player A", color: PASTEL[0], room };
 
@@ -738,6 +869,7 @@ async function createOrJoin({mode, nickname, roomCode}){
 
   } else {
     if(!snap.exists()) return alert("Room not found.");
+
     const orderSnap = await db.ref(`rooms/${room}/order`).get();
     const order = orderSnap.val() || [];
     if(order.length >= 2) return alert("Room already has 2 players.");
@@ -771,11 +903,8 @@ $("joinGo").onclick = () => createOrJoin({
 });
 
 /* ==========================
-   Lobby Setup
+   Lobby & digits
    ========================== */
-let secretUI = null;
-let guessUI = null;
-
 function updateDigitsUI(digits){
   $("digitCountLabel").textContent = digits;
   $("guessDigitCount").textContent = digits;
@@ -784,28 +913,66 @@ function updateDigitsUI(digits){
   secretUI = buildDigitBoxes("secretBoxes", digits);
   guessUI = buildDigitBoxes("guessBoxes", digits, {
     onEnter: (val) => {
-      // Enter to submit on desktop / mobile keyboard enter
+      // Enter submits (desktop + mobile external keyboards)
       if(validDigitsString(val, digits) && isMyTurn() && !roomState.winner) {
         submitGuessInternal().catch(()=>{});
       }
     }
   });
 
-  // secret display: always hidden by default
   revealSecret = false;
   $("mySecretDisplay").textContent = "•".repeat(digits);
 }
 
-function lobbyStatusText(){
+function renderPlayersList(){
+  const host = $("playersList");
+  host.innerHTML = "";
+
   const order = roomState.order || [];
-  if(order.length < 2) return `<span class="statusLine warn">Waiting for second player to join...</span>`;
-  const pA = roomState.players?.[order[0]];
-  const pB = roomState.players?.[order[1]];
-  if(!(pA?.hasSecret && pB?.hasSecret)) return `<span class="statusLine warn">Waiting until both players lock secrets...</span>`;
-  return `<span class="statusLine good">Both secrets ready. Starting game…</span>`;
+  if(order.length === 0){
+    host.innerHTML = `<div class="mini">Waiting…</div>`;
+    return;
+  }
+
+  order.forEach((pid, idx) => {
+    const p = roomState.players?.[pid] || {};
+    const name = p.nickname || (idx===0 ? "Player A" : "Player B");
+    const has = !!p.hasSecret;
+
+    const line = document.createElement("div");
+    line.className = "playerLine";
+
+    // status shown next to name on left
+    line.innerHTML = `
+      <div class="pLeft">
+        <span class="dot" style="background:${p.color||"#999"}"></span>
+        <div style="min-width:0">
+          <div class="pName">${escapeHtml(name)}</div>
+          <div class="pStatus ${has ? "ok" : "wait"}">${has ? "Secret set ✅" : "Secret not set"}</div>
+        </div>
+      </div>
+      <span class="roleTag">${idx===0 ? "Player A" : "Player B"}</span>
+    `;
+    host.appendChild(line);
+  });
+
+  if(order.length < 2){
+    const wait = document.createElement("div");
+    wait.className = "mini";
+    wait.style.marginTop = "10px";
+    wait.textContent = "Waiting for second player to join…";
+    host.appendChild(wait);
+  }
 }
 
-$("goGameBtn").onclick = () => goto("step-game");
+function lobbyStatusText(){
+  const order = roomState.order || [];
+  if(order.length < 2) return `<span class="statusLine warn">Waiting for second player…</span>`;
+  const pA = roomState.players?.[order[0]];
+  const pB = roomState.players?.[order[1]];
+  if(!(pA?.hasSecret && pB?.hasSecret)) return `<span class="statusLine warn">Waiting until both players lock secrets…</span>`;
+  return `<span class="statusLine good">Both secrets ready. Starting game…</span>`;
+}
 
 function canStart(){
   const order = roomState.order || [];
@@ -829,12 +996,12 @@ async function ensureStartIfReady(){
   }
 }
 
-/* ====== DIGITS CHANGE: auto reset secrets (fix #1, #2c) ====== */
+$("goGameBtn").onclick = () => goto("step-game");
+
+/* Digits change: reset secrets + guesses immediately (both players) */
 $("digitsSel").onchange = async () => {
   const digits = parseInt($("digitsSel").value, 10);
   if(!Number.isInteger(digits) || digits < 3 || digits > 6) return;
-
-  // Always reset secrets/guesses when digits change (even if already set)
   await resetToLobby({ digits, reason: "digitsChanged" });
 };
 
@@ -842,11 +1009,11 @@ async function resetToLobby({digits, reason}){
   const base = `rooms/${my.room}`;
   const players = roomState.players || {};
   const updates = {};
+
   Object.keys(players).forEach(pid => {
     updates[`${base}/players/${pid}/hasSecret`] = false;
   });
 
-  // clear secrets + guesses and mark lobby
   updates[`${base}/secrets`] = null;
   updates[`${base}/guesses`] = null;
   updates[`${base}/started`] = false;
@@ -859,38 +1026,14 @@ async function resetToLobby({digits, reason}){
 
   await db.ref().update(updates);
 
-  // local UI
   secretUI?.clear();
   guessUI?.clear();
 }
 
-/* ====== Save names (simple) ====== */
-$("saveNames").onclick = async () => {
-  const order = roomState.order || [];
-  const aPid = order[0];
-  const bPid = order[1];
-
-  const nA = ($("nameA").value || "").trim();
-  const nB = ($("nameB").value || "").trim();
-
-  const ups = {};
-  if(aPid && nA) ups[`rooms/${my.room}/players/${aPid}/nickname`] = nA;
-  if(bPid && nB) ups[`rooms/${my.room}/players/${bPid}/nickname`] = nB;
-
-  if(Object.keys(ups).length === 0){
-    $("nameStatus").textContent = "Nothing to save.";
-    return;
-  }
-  await db.ref().update(ups);
-  $("nameStatus").textContent = "Names saved.";
-  setTimeout(()=> $("nameStatus").textContent="", 1200);
-};
-
-/* ====== Lock secret (validation fixed) ====== */
+/* Lock secret */
 $("setSecretBtn").onclick = async () => {
   const digits = roomState.settings?.digits || 4;
   const val = (secretUI?.getValue() || "").trim();
-
   if(!validDigitsString(val, digits)) return alert(`Enter exactly ${digits} digits.`);
 
   await db.ref(`rooms/${my.room}/secrets/${my.pid}`).set(val);
@@ -909,10 +1052,7 @@ function myOpponentPid(){
   if(order.length !== 2) return null;
   return order[0] === my.pid ? order[1] : order[0];
 }
-
-function isMyTurn(){
-  return roomState.turnPid === my.pid;
-}
+function isMyTurn(){ return roomState.turnPid === my.pid; }
 
 function renderGameHeader(){
   const me = roomState.players?.[my.pid] || {};
@@ -925,12 +1065,7 @@ function renderGameHeader(){
 
   const digits = roomState.settings?.digits || 4;
   const mySecret = roomState.secrets?.[my.pid] || "";
-
-  if(revealSecret && mySecret){
-    $("mySecretDisplay").textContent = mySecret;
-  }else{
-    $("mySecretDisplay").textContent = "•".repeat(digits);
-  }
+  $("mySecretDisplay").textContent = (revealSecret && mySecret) ? mySecret : "•".repeat(digits);
 
   const disabled = !roomState.started || !!roomState.winner || !isMyTurn();
   $("submitGuess").disabled = disabled;
@@ -940,14 +1075,14 @@ function renderGameHeader(){
     const name = roomState.winner.name || "Winner";
     $("lastFeedback").innerHTML = `<span class="statusLine good">Game ended. Winner: <b>${escapeHtml(name)}</b></span>`;
     show("oneMoreGame");
-  }else{
+  } else {
     hide("oneMoreGame");
     if(!roomState.started){
       $("lastFeedback").innerHTML = `<span class="statusLine warn">Waiting for game to start…</span>`;
     } else if(isMyTurn()){
       $("lastFeedback").innerHTML = `<span class="statusLine good">Your turn. Enter a guess.</span>`;
-      // Autofocus (fix #10)
-      setTimeout(()=> guessUI?.focus(), 50);
+      // autofocus (mobile keypad opens)
+      setTimeout(()=> guessUI?.focus(), 60);
     } else {
       $("lastFeedback").innerHTML = `<span class="statusLine warn">Opponent's turn…</span>`;
     }
@@ -955,7 +1090,6 @@ function renderGameHeader(){
 }
 
 $("toggleSecret").onclick = () => { revealSecret = !revealSecret; renderGameHeader(); };
-
 $("clearGuess").onclick = () => guessUI?.clear();
 
 async function submitGuessInternal(){
@@ -964,7 +1098,6 @@ async function submitGuessInternal(){
 
   const digits = roomState.settings?.digits || 4;
   const guess = (guessUI?.getValue() || "").trim();
-
   if(!validDigitsString(guess, digits)) return alert(`Enter exactly ${digits} digits.`);
 
   const oppPid = myOpponentPid();
@@ -975,14 +1108,7 @@ async function submitGuessInternal(){
   const feedback = formatFeedback(numCorrect, posCorrect);
 
   const gRef = db.ref(`rooms/${my.room}/guesses`).push();
-  await gRef.set({
-    by: my.pid,
-    guess,
-    numCorrect,
-    posCorrect,
-    feedback,
-    ts: now()
-  });
+  await gRef.set({ by: my.pid, guess, numCorrect, posCorrect, feedback, ts: now() });
 
   if(guess === oppSecret){
     const winnerName = roomState.players?.[my.pid]?.nickname || my.name || "Winner";
@@ -996,12 +1122,11 @@ async function submitGuessInternal(){
 
 $("submitGuess").onclick = () => submitGuessInternal().catch(()=>{});
 
-/* Next game button: resets for BOTH players (fix #5) */
+/* Next game resets BOTH players to lobby */
 $("oneMoreGame").onclick = async () => {
   const digits = roomState.settings?.digits || 4;
   await resetToLobby({ digits, reason: "nextGame" });
 };
-
 $("winnerNext").onclick = async () => {
   $("winnerBack").classList.remove("show");
   const digits = roomState.settings?.digits || 4;
@@ -1011,18 +1136,14 @@ $("winnerNext").onclick = async () => {
 /* ==========================
    History
    ========================== */
-$("tabMine").onclick = () => {
-  currentTab = "mine";
-  $("tabMine").classList.add("primary");
-  $("tabOpp").classList.remove("primary");
+function setTab(tab){
+  currentTab = tab;
+  $("tabMine").classList.toggle("active", tab === "mine");
+  $("tabOpp").classList.toggle("active", tab === "opp");
   renderHistory();
-};
-$("tabOpp").onclick  = () => {
-  currentTab = "opp";
-  $("tabOpp").classList.add("primary");
-  $("tabMine").classList.remove("primary");
-  renderHistory();
-};
+}
+$("tabMine").onclick = () => setTab("mine");
+$("tabOpp").onclick  = () => setTab("opp");
 
 function renderHistory(){
   const host = $("historyList");
@@ -1098,31 +1219,19 @@ function attachRoomListeners(){
 
     $("roomTop").textContent = my.room;
 
-    // reflect names in lobby inputs (not overwriting what user is typing if focused)
-    const order = roomState.order || [];
-    const aPid = order[0];
-    const bPid = order[1];
-    if(document.activeElement !== $("nameA")){
-      $("nameA").value = roomState.players?.[aPid]?.nickname || "";
-    }
-    if(document.activeElement !== $("nameB")){
-      $("nameB").value = roomState.players?.[bPid]?.nickname || "";
-    }
-
     const digits = roomState.settings.digits || 4;
     updateDigitsUI(digits);
 
-    // route
     if(roomState.stage === "game") goto("step-game");
     else goto("step-lobby");
 
     $("secretStatus").innerHTML = lobbyStatusText();
 
-    // show go-to-game if started but still in lobby stage (rare)
     if(roomState.stage === "lobby" && roomState.started) show("goGameBtn");
     else hide("goGameBtn");
 
     ensureStartIfReady().catch(()=>{});
+    renderPlayersList();
     renderGameHeader();
     renderHistory();
     startElapsedUpdater();
@@ -1130,6 +1239,7 @@ function attachRoomListeners(){
 
   on(`${base}/players`, (snap) => {
     roomState.players = snap.val() || {};
+    renderPlayersList();
     $("secretStatus").innerHTML = lobbyStatusText();
     ensureStartIfReady().catch(()=>{});
     renderGameHeader();
@@ -1155,7 +1265,6 @@ function attachRoomListeners(){
     roomState.winner = w || null;
 
     if(w && w.name){
-      // Winner popup (fix #4)
       $("winnerName").textContent = w.name;
       $("winnerBack").classList.add("show");
       launchConfetti();
@@ -1167,17 +1276,17 @@ function attachRoomListeners(){
 /* ==========================
    Boot
    ========================== */
-initTheme();
+initThemeAndMode();
 goto("step-choose");
 
-// Better mobile UX: if user taps anywhere in guess area, focus first empty box
+// Autofocus guess area on tap (mobile)
 document.addEventListener("click", (e) => {
   if(e.target.closest("#guessBoxes") && roomState.stage === "game" && isMyTurn() && !roomState.winner){
     guessUI?.focus();
   }
 });
 
-// Basic cleanup: remove player on tab close (best-effort)
+// Best-effort remove player on close
 window.addEventListener("beforeunload", () => {
   try{
     if(my?.room && my?.pid){
